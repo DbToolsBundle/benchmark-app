@@ -1,0 +1,30 @@
+db_tools:
+    backup_expiration_age: '1 year ago'
+    # excluded_tables:
+    #   default: ['user', 'toto']
+    # backupper_binaries:
+    #     pgsql: 'toto'
+    #     pdo_pgsql: 'pg_dump'
+    #     pdo_mysql: 'mysqldump'
+    # restorer_binaries:
+    #     pgsql: 'toto'
+    #     pdo_pgsql: 'pg_restore'
+    #     pdo_mysql: 'mysql'
+
+    # anonymizer_paths:
+    #   - '%kernel.project_dir%/vendor/makinacorpus/db-tools-bundle/src/Anonymizer'
+
+    # Anonymization configuration.
+    anonymization:
+        # If you want to configure anonymization with attributes on
+        # Doctrine entities, you have nothing to do. If doctrine/orm
+        # is available the DbToolsBundle will automaticly look for it.
+        #
+        # To load configuration from a yaml:
+        # 1/ If you want to configure anonymization only for the default
+        # DBAL connection, declare it like this:
+    #     yaml: '%kernel.project_dir%/config/anonymizations.yaml'
+        # 2/ If you use multiple connection, declare each configuration like this:
+    #     yaml:
+    #         - connection_one: '%kernel.project_dir%/config/anonymizations/connection_one.yaml'
+    #         - connection_two: '%kernel.project_dir%/config/anonymizations/connection_two.yaml'

@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: db
+        POSTGRES_USER: db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+        - site
+
+  mariadb:
+    image: mariadb:11
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: db
+      MARIADB_USER: db
+      MARIADB_PASSWORD: password
+    volumes:
+      - mariadbdata:/var/lib/mariadb
+    networks:
+        - site
+
+  mysql:
+    image: mysql:8
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: db
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+        - site
+
+  php-fpm:
+      build: ./docker/php-fpm
+      depends_on:
+        - postgres
+        - mysql
+        - mariadb
+      volumes:
+        - ./app/:/var/www
+      networks:
+        - site
+
+  nginx:
+      build: ./docker/nginx
+      volumes:
+        - ./app/:/var/www
+        - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        - ./docker/nginx/sites/:/etc/nginx/sites-available
+        - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      depends_on:
+        - php-fpm
+      ports:
+        - "8067:80"
+        - "44367:443"
+      networks:
+        - site
+
+networks:
+  site:
+
+volumes:
+  pgdata:
+  mysqldata:
+  mariadbdata:

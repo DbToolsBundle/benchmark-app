@@ -1,0 +1,91 @@
+doctrine:
+    dbal:
+        connections:
+            sqlite:
+                url: '%env(resolve:DATABASE_URL_SQLITE)%'
+            postgresql:
+                url: '%env(resolve:DATABASE_URL_POSTGRESQL)%'
+            mysql:
+                url: '%env(resolve:DATABASE_URL_MYSQL)%'
+            mariadb:
+                url: '%env(resolve:DATABASE_URL_MARIADB)%'
+        default_connection: sqlite
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '15'
+    orm:
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        default_entity_manager: sqlite
+        entity_managers:
+            sqlite:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: sqlite
+                mappings:
+                    SQLite:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Entity/SQLite'
+                        prefix: 'App\Entity\SQLite'
+                        alias: SQLite
+            postgresql:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: postgresql
+                mappings:
+                    PostreSQL:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Entity/PostgreSQL'
+                        prefix: 'App\Entity\PostgreSQL'
+                        alias: PostgreSQL
+            mysql:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: mysql
+                mappings:
+                    MySQL:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Entity/MySQL'
+                        prefix: 'App\Entity\MySQL'
+                        alias: MySQL
+            mariadb:
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: mariadb
+                mappings:
+                    MariaDB:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Entity/MariaDB'
+                        prefix: 'App\Entity\MariaDB'
+                        alias: MariaDB
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
