@@ -1,15 +1,15 @@
 # A Symfony app to demonstrate the DbToolsBundle performance
 
-The DbToolsBundle help Symfony developpers to easily set up an anonymization workflow.
+The DbToolsBundle helps Symfony developpers to easily set up an anonymization workflow.
 
-Unlike other anonymization tools, we choose to anonimyze throught SQL queries instead of
+Unlike other anonymization tools, we choose to anonimyze throught SQL update queries instead of
 loading each entities to anonymize them with some PHP scripts.
 
-This method makes the DbToolsBundle really fast to process your data.
+This method makes the DbToolsBundle really fast to anonymize data.
 
 The purpose of this application is to demonstrate these capabilities.
 
-In the `app/` directory, you will find a Symfony application that uses 4 differents
+In the `app/` directory, you will find a Symfony application that uses 4 different
 DBAL Doctrine connections, one for each of those database platform:
   * SQLite
   * PostgreSQL
@@ -23,15 +23,8 @@ Each one of these connections has 3 entities defined like this:
 
 At repository root, you will find 4 backups, one for each connection, and ready to be anonymized.
 
-This repository also comes with a complete docker stack:
-* A php-fpm container
-* A Nginx container
-* Different database platforms containers:
-  * PostgreSQL
-  * MariaDb
-  * MySQL
-
-To start the app and launch anonymization on your local machine, follow these steps:
+This repository also comes with a complete docker stack, to start it and launch anonymization
+on your local machine, follow these steps:
 
 ```sh
   # Start up the docker stack
@@ -47,7 +40,7 @@ To start the app and launch anonymization on your local machine, follow these st
   docker compose exec php-fpm bin/console doctrine:schema:update --complete --force --em=mariadb
 ```
 
-From here, you are ready to launch anonymization from given backups:
+From here, you are ready to launch anonymization for each given backup:
 
 ```sh
   time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/sqlite.sql --connection=sqlite -n
@@ -56,7 +49,10 @@ From here, you are ready to launch anonymization from given backups:
   time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mariadb.sql --connection=mariadb -n
 
 ```
-If you want to play more with this application, here is some usefull commands
+--
+
+If you want to play more with this application, here is some usefull commands:
+
 ```sh
   # Create dummy data (100 000 customers) for each connection
   docker compose exec php-fpm bin/console app:dummy-data --no-debug
@@ -70,7 +66,7 @@ If you want to play more with this application, here is some usefull commands
   # Dump current anonymization configuration
   docker compose exec php-fpm bin/console db-tools:anonymization:dump-config
 
-  # Drop all schema
+  # Drop all schemas
   docker compose exec php-fpm bin/console doctrine:schema:drop --force --em=sqlite
   docker compose exec php-fpm bin/console doctrine:schema:drop --force --em=postgresql
   docker compose exec php-fpm bin/console doctrine:schema:drop --force --em=mysql
@@ -79,7 +75,7 @@ If you want to play more with this application, here is some usefull commands
   # Shut down containers
   docker compose down
 
-  # Connect to each databases
+  # Connect to each database
   docker compose exec postgres psql -U db db
   docker compose exec mysql mysql -u db db --password=password
   docker compose exec mariadb mariadb -u db db --password=password
