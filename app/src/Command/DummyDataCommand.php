@@ -113,6 +113,7 @@ class DummyDataCommand extends Command
             $entityManager->clear();
 
             $io->writeln('');
+            $io->writeln('');
         }
 
         return Command::SUCCESS;

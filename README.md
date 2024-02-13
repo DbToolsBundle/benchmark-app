@@ -47,9 +47,8 @@ From here, you are ready to launch anonymization for each given backup:
   time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/postgresql.dump --connection=postgresql -n
   time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mysql.sql --connection=mysql -n
   time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mariadb.sql --connection=mariadb -n
-
 ```
---
+----
 
 If you want to play more with this application, here is some usefull commands:
 

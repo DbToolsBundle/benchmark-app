@@ -9,7 +9,7 @@ use MakinaCorpus\DbToolsBundle\Attribute\Anonymize;
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[Anonymize(type: 'address', options: [
     'street_address' => 'street',
-    'postal_code' => 'zipCode',
+    'postal_code' => 'zip_code',
     'locality' => 'city',
     'country' => 'country',
 ])]
