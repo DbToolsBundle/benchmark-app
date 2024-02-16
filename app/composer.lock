@@ -278,16 +278,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.8.1",
+            "version": "3.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c9ea252cdce4da324ede3d6c5913dd89f769afd2"
+                "reference": "a19a1d05ca211f41089dffcc387733a6875196cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c9ea252cdce4da324ede3d6c5913dd89f769afd2",
-                "reference": "c9ea252cdce4da324ede3d6c5913dd89f769afd2",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a19a1d05ca211f41089dffcc387733a6875196cb",
+                "reference": "a19a1d05ca211f41089dffcc387733a6875196cb",
                 "shasum": ""
             },
             "require": {
@@ -371,7 +371,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.8.1"
+                "source": "https://github.com/doctrine/dbal/tree/3.8.2"
             },
             "funding": [
                 {
@@ -387,7 +387,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-03T17:33:49+00:00"
+            "time": "2024-02-12T18:36:36+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1330,16 +1330,16 @@
         },
         {
             "name": "makinacorpus/db-tools-bundle",
-            "version": "1.0.1",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/makinacorpus/DbToolsBundle.git",
-                "reference": "44b1cac0ba827ffc22a999647577b2ff47ae3aca"
+                "reference": "13360705b812e1199adb8b38e709c10aa685aa27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/makinacorpus/DbToolsBundle/zipball/44b1cac0ba827ffc22a999647577b2ff47ae3aca",
-                "reference": "44b1cac0ba827ffc22a999647577b2ff47ae3aca",
+                "url": "https://api.github.com/repos/makinacorpus/DbToolsBundle/zipball/13360705b812e1199adb8b38e709c10aa685aa27",
+                "reference": "13360705b812e1199adb8b38e709c10aa685aa27",
                 "shasum": ""
             },
             "require": {
@@ -1383,9 +1383,9 @@
             "description": "A set of Symfony commands to dump/restore/anonymize database",
             "support": {
                 "issues": "https://github.com/makinacorpus/DbToolsBundle/issues",
-                "source": "https://github.com/makinacorpus/DbToolsBundle/tree/1.0.1"
+                "source": "https://github.com/makinacorpus/DbToolsBundle/tree/1.0.3"
             },
-            "time": "2024-02-12T16:21:14+00:00"
+            "time": "2024-02-15T09:02:06+00:00"
         },
         {
             "name": "makinacorpus/query-builder",

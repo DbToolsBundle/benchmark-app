@@ -11,10 +11,10 @@ The purpose of this application is to demonstrate these capabilities.
 
 In the `app/` directory, you will find a Symfony application that uses 4 different
 DBAL Doctrine connections, one for each of those database platform:
-  * SQLite
-  * PostgreSQL
-  * MariaDb
-  * MySQL
+* SQLite
+* PostgreSQL
+* MariaDb
+* MySQL
 
 Each one of these connections has 3 entities defined like this:
 * Customer
