@@ -66,7 +66,10 @@ class DummyDataCommand extends Command
             ];
         }
 
-        $sampleSize = $input->getOption('sample-size') ?? 100000;
+        $sampleSize = (int)$input->getOption('sample-size') ?? 100000;
+
+
+        $io->writeln('Creating ' . $sampleSize . ' entries.');
 
         foreach($entitiesDef as $managerName => $customerClass) {
             $entityManager = $this->doctrineRegistry->getManager($managerName);

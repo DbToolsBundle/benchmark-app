@@ -43,10 +43,12 @@ on your local machine, follow these steps:
 From here, you are ready to launch anonymization for each given backup:
 
 ```sh
-  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/sqlite.sql --connection=sqlite -n
-  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/postgresql.dump --connection=postgresql -n
-  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mysql.sql --connection=mysql -n
-  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mariadb.sql --connection=mariadb -n
+  # Anonymizing 100K backups
+  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/sqlite-100K.sql --connection=sqlite -n
+  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/postgresql-100K.dump --connection=postgresql -n
+  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mysql-100K.sql --connection=mysql -n
+  time docker compose exec php-fpm bin/console db-tools:anonymize /var/www/mariadb-100K.sql --connection=mariadb -n
+
 ```
 ----
 
@@ -54,7 +56,7 @@ If you want to play more with this application, here is some usefull commands:
 
 ```sh
   # Create dummy data (100 000 customers) for each connection
-  docker compose exec php-fpm bin/console app:dummy-data --no-debug
+  docker compose exec php-fpm bin/console app:dummy-data --no-debug -s 100000
 
   # Backup all databases
   docker compose exec php-fpm bin/console db-tools:backup --connection=sqlite
