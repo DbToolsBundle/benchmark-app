@@ -2,10 +2,10 @@
 
 namespace App\Command;
 
-use App\Entity\MariaDB\Customer as MariaDBCustomer;
-use App\Entity\MySQL\Customer as MySQLCustomer;
-use App\Entity\PostgreSQL\Customer as PostgreSQLCustomer;
-use App\Entity\SQLite\Customer as SQLiteCustomer;
+use App\Entity\MariaDb as MariaDb;
+use App\Entity\MySQL as MySQL;
+use App\Entity\PostgreSQL as PostgreSQL;
+use App\Entity\SQLite as SQLite;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -29,7 +29,14 @@ class DummyDataCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setHelp('Create some dummy data')
+            ->setHelp(<<<TXT
+            This command allows you to create dummy data.
+            If no option is given, it will create, for all available connections, 100K Customers and, for each one of them:
+                - 2 Adresses for all available connections
+                - 10 Orders
+
+            So there will be 100K Customers, 200K Adresses and 1 000K Orders.
+            TXT)
             ->addOption(
                 'connection',
                 'c',
@@ -37,10 +44,25 @@ class DummyDataCommand extends Command
                 'A doctrine connection name. If not given, create dummy data for all available connections'
             )
             ->addOption(
-                'sample-size',
-                's',
+                'customer-entries',
+                'ce',
                 InputOption::VALUE_OPTIONAL,
-                'Number of entries to create (default is 100 000)'
+                'Number of Customers to create',
+                100000
+            )
+            ->addOption(
+                'address-per-customer',
+                'apc',
+                InputOption::VALUE_OPTIONAL,
+                'Number of Adresses to create for each Customer',
+                2
+            )
+            ->addOption(
+                'order-per-customer',
+                'opc',
+                InputOption::VALUE_OPTIONAL,
+                'Number of Orders to create for each Customer',
+                10
             )
         ;
     }
@@ -50,10 +72,26 @@ class DummyDataCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $entitiesDef = [
-            'sqlite' => SQLiteCustomer::class,
-            'postgresql' => PostgreSQLCustomer::class,
-            'mysql' => MySQLCustomer::class,
-            'mariadb' => MariaDBCustomer::class,
+            'sqlite' => [
+                'customer' => SQLite\Customer::class,
+                'address' => SQLite\Address::class,
+                'order' => SQLite\Order::class,
+            ],
+            'postgresql' => [
+                'customer' => PostgreSQL\Customer::class,
+                'address' => PostgreSQL\Address::class,
+                'order' => PostgreSQL\Order::class,
+            ],
+            'mysql' => [
+                'customer' => MySQL\Customer::class,
+                'address' => MySQL\Address::class,
+                'order' => MySQL\Order::class,
+            ],
+            'mariadb' => [
+                'customer' => MariaDb\Customer::class,
+                'address' => MariaDb\Address::class,
+                'order' => MariaDb\Order::class,
+            ],
         ];
 
         if ($connectionName = $input->getOption('connection')) {
@@ -66,43 +104,82 @@ class DummyDataCommand extends Command
             ];
         }
 
-        $sampleSize = (int)$input->getOption('sample-size') ?? 100000;
+        $nbCustomer = (int)$input->getOption('customer-entries');
+        $nbAddressPerCustomer = (int)$input->getOption('address-per-customer');
+        $nbOrderPerCustomer = (int)$input->getOption('order-per-customer');
 
+        $io->writeln(\sprintf(
+            'Creating %s Customer(s) and for each one of them, %s Address(es) and %s Order(s)',
+            $nbCustomer,
+            $nbAddressPerCustomer,
+            $nbOrderPerCustomer
+        ));
 
-        $io->writeln('Creating ' . $sampleSize . ' entries.');
-
-        foreach($entitiesDef as $managerName => $customerClass) {
+        foreach($entitiesDef as $managerName => $classeNames) {
             $entityManager = $this->doctrineRegistry->getManager($managerName);
 
             $io->section($managerName);
 
-            // Let's create n Customers per batch of 200
-            $progressBar = $io->createProgressBar($sampleSize);
+            $progressBar = $io->createProgressBar($nbCustomer);
             $progressBar->setFormat('debug');
             $progressBar->start();
 
-            $batchSize = 100;
+            $batchSize = 10;
             // each one of them.
-            for ($i = 0; $i < $sampleSize; $i++) {
+            for ($i = 0; $i < $nbCustomer; $i++) {
                 $rand = \uniqid();
 
-                /** @var MySQLCustomer $customer */
-                $customer = new $customerClass();
+                /** @var MySQL\Customer $customer */
+                $customer = new $classeNames['customer']();
 
                 $customer
                     ->setEmail($rand . '@example.com')
                     ->setPassword(\md5($rand))
                     ->setLastname('lastname_' . $rand)
                     ->setFirstname('firstname_' . $rand)
-                    ->setLevel('level_' . $rand)
                     ->setAge(\rand(15, 60))
-                    ->setStreet('street_' . $rand)
-                    ->setZipCode('zip_code_' . $rand)
-                    ->setCity('city_' . $rand)
-                    ->setCountry('country_' . $rand)
+                    ->setTelephone('lastname_' . $rand)
                 ;
 
                 $entityManager->persist($customer);
+
+                /** @var Array<MySQL\Address> $addresses */
+                $addresses = [];
+                for ($j = 0; $j < $nbAddressPerCustomer; $j++) {
+                    /** @var MySQL\Address $address */
+                    $address = new $classeNames['address']();
+
+                    $address
+                        ->setCustomer($customer)
+                        ->setStreet('street_' . $rand)
+                        ->setZipCode('zipcode_' . $rand)
+                        ->setCity('city_' . $rand)
+                        ->setCountry('country_' . $rand)
+                    ;
+
+                    $entityManager->persist($address);
+                    $addresses[$j] = $address;
+                }
+
+                for ($j = 0; $j < $nbOrderPerCustomer; $j++) {
+                    /** @var MySQL\Order $order */
+                    $order = new $classeNames['order']();
+
+                    $randKeys = \array_rand($addresses, 2);
+
+                    $order
+                        ->setCustomer($customer)
+                        ->setEmail($rand . '@example.com')
+                        ->setTelephone('telephone_' . $rand)
+                        ->setTelephone($rand)
+                        ->setCreatedAt(new \DateTimeImmutable(\rand(15, 60) . 'days ago'))
+                        ->setAmount(\rand(0, 500))
+                        ->setBillingAddress($addresses[$randKeys[0]])
+                        ->setShippingAddress($addresses[$randKeys[1]])
+                    ;
+
+                    $entityManager->persist($order);
+                }
 
                 $progressBar->advance();
 
@@ -114,6 +191,8 @@ class DummyDataCommand extends Command
 
             $entityManager->flush();
             $entityManager->clear();
+
+            $progressBar->finish();
 
             $io->writeln('');
             $io->writeln('');

@@ -3,16 +3,12 @@
 namespace App\Entity\PostgreSQL;
 
 use App\Repository\PostgreSQL\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use MakinaCorpus\DbToolsBundle\Attribute\Anonymize;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-#[Anonymize(type: 'address', options: [
-    'street_address' => 'street',
-    'postal_code' => 'zip_code',
-    'locality' => 'city',
-    'country' => 'country',
-])]
 class Customer
 {
     #[ORM\Id]
@@ -36,25 +32,24 @@ class Customer
     #[Anonymize(type: 'firstname')]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
-    #[Anonymize(type: 'string', options: ['sample' => ['none', 'bad', 'good', 'expert']])]
-    private ?string $level = null;
-
     #[ORM\Column]
     #[Anonymize(type: 'integer', options: ['min' => 10, 'max' => 99])]
     private ?int $age = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $street = null;
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Address::class, orphanRemoval: true)]
+    private Collection $addresses;
 
     #[ORM\Column(length: 255)]
-    private ?string $zipCode = null;
+    private ?string $telephone = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $city = null;
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
 
-    #[ORM\Column(length: 255)]
-    private ?string $country = null;
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -109,18 +104,6 @@ class Customer
         return $this;
     }
 
-    public function getLevel(): ?string
-    {
-        return $this->level;
-    }
-
-    public function setLevel(string $level): static
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
     public function getAge(): ?int
     {
         return $this->age;
@@ -133,50 +116,74 @@ class Customer
         return $this;
     }
 
-    public function getStreet(): ?string
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAddresses(): Collection
     {
-        return $this->street;
+        return $this->addresses;
     }
 
-    public function setStreet(string $street): static
+    public function addAddress(Address $address): static
     {
-        $this->street = $street;
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setCustomer($this);
+        }
 
         return $this;
     }
 
-    public function getZipCode(): ?string
+    public function removeAddress(Address $address): static
     {
-        return $this->zipCode;
-    }
-
-    public function setZipCode(string $zipCode): static
-    {
-        $this->zipCode = $zipCode;
+        if ($this->addresses->removeElement($address)) {
+            // set the owning side to null (unless already changed)
+            if ($address->getCustomer() === $this) {
+                $address->setCustomer(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getTelephone(): ?string
     {
-        return $this->city;
+        return $this->telephone;
     }
 
-    public function setCity(string $city): static
+    public function setTelephone(string $telephone): static
     {
-        $this->city = $city;
+        $this->telephone = $telephone;
 
         return $this;
     }
 
-    public function getCountry(): ?string
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
     {
-        return $this->country;
+        return $this->orders;
     }
 
-    public function setCountry(string $country): static
+    public function addOrder(Order $order): static
     {
-        $this->country = $country;
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getCustomer() === $this) {
+                $order->setCustomer(null);
+            }
+        }
 
         return $this;
     }

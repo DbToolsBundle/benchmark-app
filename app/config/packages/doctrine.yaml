@@ -58,11 +58,11 @@ doctrine:
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 connection: mariadb
                 mappings:
-                    MariaDB:
+                    MariaDb:
                         is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity/MariaDB'
-                        prefix: 'App\Entity\MariaDB'
-                        alias: MariaDB
+                        dir: '%kernel.project_dir%/src/Entity/MariaDb'
+                        prefix: 'App\Entity\MariaDb'
+                        alias: MariaDb
 
 when@test:
     doctrine:
