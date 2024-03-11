@@ -45,21 +45,21 @@ class DummyDataCommand extends Command
             )
             ->addOption(
                 'customer-entries',
-                'ce',
+                'u',
                 InputOption::VALUE_OPTIONAL,
                 'Number of Customers to create',
                 100000
             )
             ->addOption(
                 'address-per-customer',
-                'apc',
+                'a',
                 InputOption::VALUE_OPTIONAL,
                 'Number of Adresses to create for each Customer',
                 2
             )
             ->addOption(
                 'order-per-customer',
-                'opc',
+                'o',
                 InputOption::VALUE_OPTIONAL,
                 'Number of Orders to create for each Customer',
                 10

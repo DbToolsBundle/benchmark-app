@@ -83,13 +83,15 @@ So there will be 100K Customers, 200K Adresses and 1 000K Orders to anonymized.
 
 Results are:
 
-|                                                   | PostgreSQL | SQLite | MySQL   | MariaDb |
-|---------------------------------------------------|------------|--------|---------|---------|
-| 100K Customers alone                              | ~5s        | ~9s    | ~53s    | ~20s
-| 200K Addresses alone                              | ~6s        | ~10s   | ~42s    | ~26s
-| 1 000K Orders alone                               | ~16s       | ~11s   | ~36m31s | ~1m15
-| 100K Customers and 200K Addresses                 | ~7s        | ~10s   | ~1m16   | ~32s
-| 100K Customers, 200K Addresses and 1 000K Orders  | ~24s       | ~25s   | ~36m47s | ~1m40
+|                                                   | PostgreSQL | SQLite | MariaDb | MySQL
+|---------------------------------------------------|------------|--------|---------|---------
+| 100K Customers alone                              | ~5s        | ~7s    | ~20s    | ~53s
+| 500K Customers alone                              | ~9s        | ~10s   | ~37s    | ~3m44s
+| 1 000K Customers alone                            | ~16s       | ~16s   | ~1m23s  | ~43m56s
+| 200K Addresses alone                              | ~6s        | ~10s   | ~26s    | ~42s
+| 1 000K Orders alone                               | ~16s       | ~11s   | ~1m15s  | ~36m31s
+| 100K Customers and 200K Addresses                 | ~7s        | ~10s   | ~32s    | ~1m16s
+| 100K Customers, 200K Addresses and 1 000K Orders  | ~24s       | ~25s   | ~1m40s  | ~36m47s
 
 <small>**NB1**: For each line, the same backup file has been used. It means that the restore and the backup steps was
 the same: in some cases (mysqland mariadb), these steps represent a big part of the time.</small><br>
