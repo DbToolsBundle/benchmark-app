@@ -20,29 +20,29 @@ Each one of these connections has 3 entities defined: Customer, Address and Orde
 
 ```txt
 
-                            ┌──────────┐
-                            │Address   │◄──────────────┐
-                            ├──────────┤               │
-                 ┌──────────┤- customer│◄──────────┐   │
-                 ▼          │- street  │           │   │
-           ┌───────────┐    │- zipcode │           │   │
-           │Customer   │    │- city    │           │   │
-           ├───────────┤    │- country │           │   │
-           │- email    │    │          │           │   │
-           │- password │    └──────────┘           │   │
-           │- firstname│                           │   │
-           │- age      │◄─┐   ┌──────────────────┐ │   │
-           │- telephone│  │   │Order             │ │   │
-           │           │  │   ├──────────────────┤ │   │
-           └───────────┘  └───┤- customer        │ │   │
-                              │- telephone       │ │   │
-                              │- email           │ │   │
-                              │- amount          │ │   │
-                              │- createdAt       │ │   │
-                              │- billingAddress  ├─┘   │
-                              │- shippingAddress ├─────┘
-                              │- note            │
-                              └──────────────────┘
+                    ┌──────────┐
+                    │Address   │◄──────────────┐
+                    ├──────────┤               │
+         ┌──────────┤- customer│◄──────────┐   │
+         ▼          │- street  │           │   │
+   ┌───────────┐    │- zipcode │           │   │
+   │Customer   │    │- city    │           │   │
+   ├───────────┤    │- country │           │   │
+   │- email    │    │          │           │   │
+   │- password │    └──────────┘           │   │
+   │- lastname │                           │   │
+   │- firstname│◄─┐   ┌──────────────────┐ │   │
+   │- age      │  │   │Order             │ │   │
+   │- telephone│  │   ├──────────────────┤ │   │
+   └───────────┘  └───┤- customer        │ │   │
+                      │- telephone       │ │   │
+                      │- email           │ │   │
+                      │- amount          │ │   │
+                      │- createdAt       │ │   │
+                      │- billingAddress  ├─┘   │
+                      │- shippingAddress ├─────┘
+                      │- note            │
+                      └──────────────────┘
 
 ```
 
@@ -85,9 +85,7 @@ After having generating data, here is the results we got:
 | 100K Customers and 200K Addresses                     | ~7s        | ~10s   | ~32s    | ~1m16s
 | 100K Customers, 200K Addresses and 1&nbsp;000K Orders | ~24s       | ~25s   | ~1m40s  | ~36m47s
 
-<small>**NB1**: For each line, the same backup file has been used. It means that the restore and the backup steps was
-the same: in some cases (mysqland mariadb), these steps represent a big part of the time.</small><br>
-<small>**NB2**: Each database vendor docker image has been used as is. Without any tweaking.
+<small>**NB**: Each database vendor docker image has been used as is. Without any tweaking.
 This could explain the bad results for MySQL.</small>
 
 --
