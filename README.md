@@ -2,7 +2,7 @@
 
 The DbToolsBundle helps Symfony developpers to easily set up an anonymization workflow.
 
-Unlike other anonymization tools, we choose to anonimyze throught SQL update queries instead of
+Unlike other anonymization tools, we choose to anonymize throught SQL update queries instead of
 loading each entities to anonymize them with some PHP scripts.
 
 This method makes the DbToolsBundle really fast to anonymize data.
@@ -10,7 +10,7 @@ This method makes the DbToolsBundle really fast to anonymize data.
 The purpose of this application is to demonstrate these capabilities.
 
 In the `app/` directory, you will find a Symfony application that uses 4 different
-DBAL Doctrine connections, one for each of those database platform:
+DBAL Doctrine connections, one for each of those database platforms:
 * SQLite
 * PostgreSQL
 * MariaDb
@@ -73,15 +73,7 @@ Table: order
   amount    | float      |  min: 10, max: 99
   note      | lorem      |
 
-At repository root, you will find 4 backups, one for each connection, and ready to be anonymized.
-
-These backups contain 100K Customers and, for each one of them:
-  - 2 Adresses for all available connections
-  - 10 Orders
-
-So there will be 100K Customers, 200K Adresses and 1 000K Orders to anonymized.
-
-Results are:
+After having generating data, here is the results we got:
 
 |                                                   | PostgreSQL | SQLite | MariaDb | MySQL
 |---------------------------------------------------|------------|--------|---------|---------
@@ -96,7 +88,7 @@ Results are:
 <small>**NB1**: For each line, the same backup file has been used. It means that the restore and the backup steps was
 the same: in some cases (mysqland mariadb), these steps represent a big part of the time.</small><br>
 <small>**NB2**: Each database vendor docker image has been used as is. Without any tweaking.
-This could explain bad result for MySQL.</small>
+This could explain the bad results for MySQL.</small>
 
 --
 
